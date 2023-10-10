@@ -2,11 +2,11 @@ require('dotenv').config(); //Permite usar variables de entorno
 const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
-const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT } = process.env;
-
-// console.log(DB_USER);
+const { PGUSER, PGPASSWORD,PGHOST, PGDATABASE, PGPORT } = process.env;
+// console.log(process.env.DATABASE_URL);
+// console.log(PGUSER);
 const sequelize = new Sequelize(
-	`${DB_HOST}`,
+	`postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`,
 	{
 		logging: false, // set to console.log to see the raw SQL queries
 		native: false, // lets Sequelize know we can use pg-native for ~30% more speed
@@ -49,3 +49,5 @@ module.exports = {
 	...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
 	conn: sequelize, // para importart la conexión { conn } = require('./db.js');
 };
+
+// `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
