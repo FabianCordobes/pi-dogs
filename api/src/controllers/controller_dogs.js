@@ -55,6 +55,7 @@ const getAllDogs = async () => {
 
 // Función para obtener perros por nombre.
 const getDogsByName = async (name) => {
+
   const allDogs = await getAllDogs();
 
   // Filtramos los perros cuyo nombre incluye el nombre proporcionado, sin importar mayúsculas o minúsculas.
@@ -63,7 +64,7 @@ const getDogsByName = async (name) => {
   });
 
    // Si no se encontraron razas con el nombre proporcionado, lanzamos un error.
-  if (!breedsByName.length) throw new Error(`The ${name} breed does not exist`);
+  if (!breedsByName.length) throw new Error(`Dog not found`);
 
   return breedsByName;
 };
@@ -78,7 +79,7 @@ const getDogsByID = async (id) => {
   });
 
    // Si no se encontraron razas con el ID proporcionado, lanzamos un error.
-  if (!breedsByID.length) throw new Error(`There is no ${id} breed`);
+  if (!breedsByID.length) throw new Error(`Dog not found`);
 
   return breedsByID;
 };
@@ -141,6 +142,10 @@ const breedsFilteredByTemp = async (temperament) => {
     dog.temperament.some((temp) => temperament.includes(temp))
   );
 };
+
+const deleteDog = async (id) => {
+
+}
 
 // Exportamos todas las funciones para que estén disponibles en otros módulos.
 module.exports = {

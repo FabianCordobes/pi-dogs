@@ -1,0 +1,87 @@
+.nav {
+	max-height: 3rem;
+	width: 97%;
+	right: auto;
+	background-image: linear-gradient(to left, #517bc4, #6385c3, #748fc1, #8498c0, #94a2be);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	z-index: 50;
+	position: fixed;
+
+	/* Añade una transición suave y un efecto de desvanecimiento */
+	/* transform: translateY(0); */
+	transition: 0.2s ease-in-out;
+	/* opacity: 1;  */
+
+	padding: 15px;
+	/* border-radius: 20px; */
+	border-bottom-left-radius: 20px;
+	border-bottom-right-radius: 20px;
+	align-self: center;
+
+	-webkit-box-shadow: 0px 4px 9px 1px rgba(0, 0, 0, 0.64);
+	-moz-box-shadow: 0px 4px 9px 1px rgba(0, 0, 0, 0.64);
+	box-shadow: 0px 4px 9px 1px rgba(0, 0, 0, 0.64);
+}
+
+.hidden {
+	transform: translateY(-100%) !important;
+	/* opacity: 0;  */
+	pointer-events: none; /* Evita la interacción con los elementos ocultos */
+	/* Otros ajustes según sea necesario */
+}
+
+.logoContainer img {
+	max-width: 5rem;
+}
+
+.linkContainer a {
+	font-size: 30px;
+	font-weight: 400;
+	color: #000; /* Color inicial, cambia a tu preferencia */
+	text-decoration: none;
+	transition: color 0.1s ease-in-out, transform 0.3s ease-in-out;
+	text-shadow: 0 2px 0 #fffffff3;
+}
+
+.linkContainer a:hover {
+	color: #000; /* Color al pasar el mouse, cambia a tu preferencia */
+	/* transform: translateY(11px); */
+	/* text-shadow: 0 3px 0 rgba(255, 255, 255, 0.8); */
+}
+
+.searchBarCont {
+	width: 24rem;
+}
+
+.activeLink {
+	background-color: yellow; /* Cambia el color temporalmente */
+	border-bottom: 2px solid #000;
+}
+
+/* Regular Navbar styles */
+
+@media (max-width: 768px) {
+	.navMenu {
+		background-color: gray;
+		position: absolute;
+		top: 5rem;
+		left: 1.9rem;
+		width: 85%;
+		height: 80vh;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 5rem;
+		border-radius: 20px;
+	}
+
+	.menuOpen::before {
+		transform: translateX(-200px); /* Esto mostrará el menú en su posición normal */
+		transition: 0.6s ease-in-out; /* Define la duración y el efecto de transición */
+	}
+	.menuOpen::after {
+		transform: translateX(0px); /* Esto mostrará el menú en su posición normal */
+	}
+}

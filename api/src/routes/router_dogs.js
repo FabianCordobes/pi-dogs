@@ -7,8 +7,10 @@ router.get("/", handlersDogs.getDogs);
 
 router.get("/:id", handlersDogs.getDogsById);
 
+// router.get("/search", handlersDogs.getDogsByName); // Ruta para buscar perros por nombre
+
 router.post("/", handlersDogs.postDog);
 
-router.put("/", handlersDogs.getBreedsFilteredByTemp);
+router.delete("/:id", handlersDogs.deleteDog);
 
 module.exports = router;

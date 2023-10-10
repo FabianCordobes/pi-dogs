@@ -1,0 +1,192 @@
+.contenedorPadre {
+   margin-top: 10rem;
+   width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.container1 {
+	font-family: 'PumpOpti';
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	border: 2px solid black;
+	width: 70%;
+	margin: 1em;
+	outline: none;
+	padding: 0.5em;
+	border: 2px dashed #1595cb;
+	border-radius: 15px;
+	background-color: rgba(141, 222, 249, 0.35);
+	box-shadow: 0 0 0 4px rgb(220, 243, 247), 2px 2px 4px 2px rgba(0, 0, 0, 0.5);
+	transition: 0.1s ease-in-out, 0.4s color;
+}
+
+.containerName {
+	display: flex;
+	flex-direction: row;
+   align-items: center;
+   justify-content: space-between;
+}
+
+.container2 {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	margin: 1em;
+}
+
+.image {
+	display: block;
+	justify-content: center;
+	align-items: center;
+	width: 25em;
+	height: 25em;
+	border-radius: 20px;
+	object-fit: cover;
+	margin: auto;
+	border: 2px solid white;
+}
+
+.arrow {
+	width: 3em;
+	height: 3em;
+	cursor: pointer;
+	margin-left: -3em;
+}
+
+.arrow:hover {
+	width: 3.4em;
+	height: 3.4em;
+}
+
+
+.name {
+	/* font-family: 'PumpOpti'; */
+	text-transform: uppercase;
+	font-size: 3.5em;
+	font-weight: 600;
+	color: #414a50;
+}
+
+.characteristic1 {
+	/* font-family: 'PumpOpti'; */
+	font-size: 2.5em;
+	background-color: #1594cbc1;
+	margin-top: 0em;
+	border-radius: 13px;
+	color: #262b2f;
+	padding: 10px;
+}
+
+.characteristicContainer {
+	/* margin-top: 0.5em; */
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.characteristicContainer div {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.characteristic {
+	/* font-family: 'PumpOpti'; */
+	font-size: 25px;
+	font-weight: 700;
+	/* margin-bottom: 0.2em; */
+	/* margin-top: 0.5em; */
+}
+
+.charValue {
+	font-size: 30px;
+}
+
+.infoContainer {
+	/* font-family: 'PumpOpti'; */
+	font-size: 19px;
+	margin-left: 2em;
+	width: 70%;
+	margin-top: 1em;
+}
+
+.img {
+	width: 1.2em;
+	height: 1.2em;
+}
+
+@media screen and (max-width: 800px) {
+	.container1 {
+		width: 95%;
+	}
+
+	.containerName {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		font-size: 10px;
+	}
+
+	.container2 {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		margin: 0.5em;
+		width: 95%;
+	}
+
+	.image {
+		width: 20em;
+		height: 20em;
+	}
+
+	.characteristic1 {
+		/* font-family: 'PumpOpti'; */
+		font-size: 1.5em;
+		background-color: #1594cbc1;
+		margin-top: 0em;
+		border-radius: 13px;
+		color: #262b2f;
+	}
+
+	.characteristicContainer {
+		margin-top: 0.5em;
+	}
+	.characteristic {
+		font-family: 'PumpOpti';
+		font-size: 25px;
+		margin-bottom: 0.2em;
+		margin-top: 0.5em;
+	}
+
+	.infoContainer {
+		font-size: 19px;
+		margin-left: 0em;
+		width: 95%;
+		margin-top: 1em;
+	}
+
+	.img {
+		width: 1.2em;
+		height: 1.2em;
+	}
+
+	.arrow {
+		width: 4em;
+		height: 4em;
+		cursor: pointer;
+		margin-left: -15px;
+	}
+
+	.arrow:hover {
+		width: 4.5em;
+		height: 4.5em;
+	}
+}
