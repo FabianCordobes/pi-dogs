@@ -2,7 +2,7 @@ require('dotenv').config(); //Permite usar variables de entorno
 const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
-const { PGUSER, PGPASSWORD,PGHOST, PGDATABASE, PGPORT } = process.env;
+const { PGUSER, PGPASSWORD,PGHOST, PGDATABASE,PGPORT } = process.env;
 // console.log(process.env.DATABASE_URL);
 // console.log(PGUSER);
 const sequelize = new Sequelize(
