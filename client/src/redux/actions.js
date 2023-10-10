@@ -36,7 +36,7 @@ export function resetPage() {
 export const getDogs = () => {
 	return async function (dispatch) {
 		try {
-			const response = await axios.get('http://localHost:3001/dogs');
+			const response = await axios.get('/dogs');
 			dispatch({
 				type: GET_DOGS,
 				payload: response.data, // Actualizar la lista de pokemones con los datos recibidos en payload
@@ -51,7 +51,7 @@ export const getDogs = () => {
 export const getTemperaments = () => {
 	return async function (dispatch) {
 		try {
-			const response = await axios.get('http://localHost:3001/temperaments');
+			const response = await axios.get('/temperaments');
 			dispatch({
 				type: GET_TEMPERAMENTS,
 				payload: response.data, // Actualizar la lista de tipos con los datos recibidos en payload
@@ -90,7 +90,7 @@ export const sortBy = (payload) => {
 export const createDog = (payload) => {
 	return async function (dispatch) {
 		try {
-			const response = await axios.post('http://localHost:3001/dogs', payload);
+			const response = await axios.post('/dogs', payload);
 
 			if (response.data !== 'Name already exists in the database') {
 				dispatch({
@@ -111,7 +111,7 @@ export const createDog = (payload) => {
 export const getDogDetails = (payload) => {
 	return async function (dispatch) {
 		try {
-			const response = await axios.get(`http://localHost:3001/dogs/${payload}`);
+			const response = await axios.get(`/dogs/${payload}`);
 			dispatch({
 				type: GET_DOG_DETAILS,
 				payload: response.data[0], // Actualizar los detalles del pokemon con los datos recibidos en payload
@@ -133,7 +133,7 @@ export const clearDogDetails = () => {
 export const getBreedByName = (payload) => {
 	return async function (dispatch) {
 		try {
-			const response = await axios.get(`http://localhost:3001/dogs?name=${payload}`);
+			const response = await axios.get(`/dogs?name=${payload}`);
 			dispatch({
 				type: GET_DOG_BY_NAME,
 				payload: response.data[0],
@@ -148,7 +148,7 @@ export const getBreedByName = (payload) => {
 export const deleteDog = (payload) => {
 	return async function (dispatch) {
 		try {
-			const response = await axios.delete(`http://localHost:3001/dogs/${payload}`);
+			const response = await axios.delete(`/dogs/${payload}`);
 			console.log(response.data);
 			dispatch({
 				type: DELETE_DOG,
