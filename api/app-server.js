@@ -1,37 +1,35 @@
-// Importamos los módulos necesarios.
-const { db } = require("./src/models");
-const router = require("./src/routes");
-const cors = require("cors");
-const express = require("express");
-const cookieParser = require("cookie-parser");
-const morgan = require("morgan");
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const routes = require('./src/routes/index');
 
-// Creamos una instancia de Express para nuestro servidor.
+require('./src/db');
+
 const server = express();
 
-// Configuración del servidor.
-server.use(express.urlencoded({ extended: true, limit: "50mb" })); // Permite el análisis de solicitudes con datos codificados en URL.
-server.use(express.json({ limit: "50mb" })); // Permite el análisis de solicitudes con datos JSON.
-server.use(cookieParser()); // Parsea las cookies en las solicitudes.
-server.use(morgan("dev")); // Configura el registro de solicitudes en el modo "dev".
+server.name = 'API';
 
-// Configuración de encabezados para permitir solicitudes cruzadas (CORS).
+server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+server.use(bodyParser.json({ limit: '50mb' }));
+server.use(cookieParser());
+server.use(morgan('dev'));
 server.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*"); 
-  res.header("Access-Control-Allow-Credentials", "true"); // Permite credenciales en solicitudes.
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  ); // Define los encabezados permitidos.
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE"); // Define los métodos HTTP permitidos.
+  res.header('Access-Control-Allow-Origin', '*'); // * asterisco para que acepter todas las urls
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
   next();
 });
 
-// Habilitamos el middleware CORS para permitir solicitudes desde diferentes dominios.
-server.use(cors());
+server.use('/', routes);
 
-// Usamos el enrutador definido en 'router' para manejar las rutas de la aplicación.
-server.use("/", router);
+// Error catching endware.
+server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
+  const status = err.status || 500;
+  const message = err.message || err;
+  console.error(err);
+  res.status(status).send(message);
+});
 
-// Exportamos la instancia de Express configurada como nuestro servidor.
 module.exports = server;

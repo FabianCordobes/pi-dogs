@@ -1,7 +1,7 @@
 // Importamos el controlador de perros y la función de validación de campos
 const { controllerDogs } = require('../controllers');
 const { validateDogCreationFields } = require('../utils/validations');
-const { Dog } = require('../models');
+const { Dog } = require('../db');
 
 // Controlador para obtener perros.
 const getDogs = async (req, res) => {

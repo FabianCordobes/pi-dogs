@@ -1,5 +1,5 @@
 // Importamos las dependencias necesarias.
-const { Temperament } = require('../models'); // Importamos el modelo Temperament.
+const { Temperament } = require('../db'); // Importamos el modelo Temperament.
 const { URL } = require('../utils/config'); // Importamos la URL y otras configuraciones.
 const axios = require('axios'); // Importamos la librería axios para hacer solicitudes HTTP.
 
