@@ -4,14 +4,15 @@ const server = require("./app-server");
 // Importamos los modelos de la base de datos y el controlador de temperamentos.
 const { db } = require("./src/models");
 const { controllerTemperaments } = require("./src/controllers/");
+const { PORT } = process.env;
 
 // Sincronizamos la base de datos con la opción 'force: true' que reemplaza las tablas existentes.
 db.sync({ force: true }).then(() => {
   // Llamamos al método 'chargeTemperamentsToDB' del controlador de temperamentos.
   controllerTemperaments.chargeTemperamentsToDB().then(() => {
     // Iniciamos el servidor en el puerto 3001 y mostramos un mensaje cuando esté listo.
-    server.listen(3001, () => {
-      console.log("% listening at 3001"); // eslint-disable-line no-console
+    server.listen(PORT, () => {
+      console.log("% listening at " + PORT); // eslint-disable-line no-console
     });
   });
 });
