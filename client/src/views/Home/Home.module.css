@@ -1,0 +1,48 @@
+.homeContainer {
+	/* margin: 85px 16px 0px 16px; */
+   
+	display: flex;
+	flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   margin-left: 1rem;
+   margin-right: 1rem;
+
+}
+
+.homeHeader {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   margin-top: 6rem;
+   gap: 1rem;
+   justify-content: center;
+}
+
+.cardsContainer {
+   margin-top: 1rem;
+  
+   margin-bottom: 6rem;
+	display: flex;
+	flex-direction: column;
+   align-items: center;
+   justify-content: center ;
+}
+
+.cardContainer {
+   /* width: 50%; */
+   gap: 30px;
+   
+   display: grid;
+	grid-template-columns: repeat(3, 1fr);
+
+}
+
+.paginationBottom {
+   margin-top: 2rem;
+}
+
+.cardLink {
+   width: 31vw;
+   text-decoration: none;
+}
