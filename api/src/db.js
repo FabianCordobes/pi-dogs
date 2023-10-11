@@ -1,25 +1,21 @@
-require('dotenv').config(); //Permite usar variables de entorno
+require('dotenv').config();
 const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
-const { PGUSER, PGPASSWORD, PGHOST, PGDATABASE, PGPORT } = process.env;
-// console.log(process.env.DATABASE_URL);
-// console.log(PGUSER);
-const sequelize = new Sequelize(
-	`postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}`,
-	{
-		logging: false, // set to console.log to see the raw SQL queries
-		native: false, // lets Sequelize know we can use pg-native for ~30% more speed
-		dialect: 'postgres', // Specify the dialect explicitly
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME, DB_PORT } = process.env;
 
-		ssl: true, // Enable SSL for the connection (since your database requires it)
+const sequelize = new Sequelize(
+	`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
+	{
+		ssl: true,
+		logging: false,
+		native: false, 
 	}
 );
 const basename = path.basename(__filename);
 
 const modelDefiners = [];
 
-// Leemos todos los archivos de la carpeta Models, los requerimos y agregamos al arreglo modelDefiners
 fs.readdirSync(path.join(__dirname, '/models'))
 	.filter(
 		(file) => file.indexOf('.') !== 0 && file !== basename && file.slice(-3) === '.js'
@@ -43,7 +39,6 @@ sequelize.models = Object.fromEntries(capsEntries);
 const { Dog, Temperament } = sequelize.models;
 
 // Aca vendrian las relaciones
-// Product.hasMany(Reviews);
 
 Dog.belongsToMany(Temperament, { through: 'dog_temperament' });
 Temperament.belongsToMany(Dog, { through: 'dog_temperament' });
@@ -53,4 +48,3 @@ module.exports = {
 	conn: sequelize, // para importart la conexión { conn } = require('./db.js');
 };
 
-// `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,

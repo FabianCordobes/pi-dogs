@@ -1,50 +1,40 @@
-import style from './Detail.module.css';
-import axios from 'axios';
-import { Link, useParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import imageArrow from '../../assets/goBack.png';
-// import imgLP from '../../assets/lifeSpan.png';
-// import imgW from '../../assets/weight.png';
-// import imgH from '../../assets/height.png';
-// import imgTemp from '../../assets/temp.png';
-// import imgBG from '../../assets/breedGroup.png';
-import { useDispatch, useSelector } from 'react-redux';
-import { clearDogDetails, deleteDog, getDogDetails } from '../../redux/actions';
-import Loading from '../../components/Loading/Loading';
-import ErrorPage from '../../components/ErrorPage/ErrorPage';
-// import ReactLoading from "react-loading";
+import style from './Detail.module.css'; // Importa los estilos CSS específicos para Detail desde './Detail.module.css'.
+import { Link, useParams } from 'react-router-dom'; // Importa el componente Link y useParams de 'react-router-dom' para enlaces y obtener parámetros de la URL.
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate de 'react-router-dom' para navegar programáticamente.
+import { useEffect } from 'react'; // Importa useEffect de React para manejar efectos secundarios.
+import imageArrow from '../../assets/goBack.png'; // Importa una imagen de una flecha desde la ubicación de assets.
+import { useDispatch, useSelector } from 'react-redux'; // Importa useDispatch y useSelector de React Redux para acceder a la tienda y despachar acciones.
+import { clearDogDetails, deleteDog, getDogDetails } from '../../redux/actions'; // Importa acciones de Redux desde 'actions.js'.
+import Loading from '../../components/Loading/Loading'; // Importa el componente Loading desde su ubicación.
+import ErrorPage from '../../components/ErrorPage/ErrorPage'; // Importa el componente ErrorPage desde su ubicación.
+
 const Detail = () => {
-	const { id } = useParams();
+	const { id } = useParams(); // Obtiene el parámetro 'id' de la URL.
 
-	const navigate = useNavigate();
+	const navigate = useNavigate(); // Obtiene la función para navegar programáticamente.
 
-	const breed = useSelector((state) => state.detailDog);
+	const breed = useSelector((state) => state.detailDog); // Accede a los detalles del perro desde el estado global de Redux.
 
-	// const [loading, setLoading] = useState(true);
-
-	const dispatch = useDispatch();
+	const dispatch = useDispatch(); // Obtiene la función dispatch de Redux.
 
 	useEffect(() => {
-		// Limpiar los detalles del Pokémon al montar el componente y obtener los detalles
-		dispatch(clearDogDetails());
-		dispatch(getDogDetails(id));
-		// console.log(breed.id);
+		dispatch(clearDogDetails()); // Limpia los detalles del perro.
+		dispatch(getDogDetails(id)); // Obtiene los detalles del perro con el ID especificado.
 
-		// Manipulación del estilo del elemento 'navbar'
 		var value = '0px';
-		document.getElementById('navbar').style.transform = `translate(0, ${value})`;
+		document.getElementById('navbar').style.transform = `translate(0, ${value})`; // Configura el estilo del elemento con ID 'navbar'.
 	}, [id, dispatch]);
 
 	const handleDelete = () => {
-		dispatch(deleteDog(breed.id));
-		navigate('/home');
+		dispatch(deleteDog(breed.id)); // Envía una acción para eliminar el perro con el ID especificado.
+		navigate('/home'); // Navega a la ruta '/home'.
 	};
 
-	// if (pokemonDetail === 'Pokemon not found') return <PokeNotFound />;
-
-	if (breed === 'Dog not found') return <ErrorPage />;
-	if (breed.name === undefined) return <Loading />;
+	if (breed === 'Dog not found') return <ErrorPage />; // Si no se encuentra el perro, muestra una página de error.
+	if (breed.name === undefined)
+		return (
+			<Loading />
+		); // Si los detalles del perro no se han cargado todavía, muestra un componente de carga.
 	else {
 		return (
 			<div className={style.contenedorPadre}>
@@ -63,7 +53,7 @@ const Detail = () => {
 						<h1 className={style.name}>{breed.name}</h1>
 
 						{breed && breed?.id?.length > 30 && (
-							<button onClick={handleDelete}> Delete Pokemon </button>
+							<button onClick={handleDelete}> Delete Dog </button>
 						)}
 					</div>
 
@@ -121,7 +111,9 @@ const Detail = () => {
 
 								<div>
 									<div className={style.characteristic}>Breed Group: </div>
-									<div className={style.charValue}>{breed.breed_group ? `${breed.breed_group}` : 'N/A'}</div>
+									<div className={style.charValue}>
+										{breed.breed_group ? `${breed.breed_group}` : 'N/A'}
+									</div>
 								</div>
 								{breed.temperaments ? (
 									<div>

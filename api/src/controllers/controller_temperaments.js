@@ -5,7 +5,7 @@ const axios = require('axios'); // Importamos la librería axios para hacer soli
 
 // Función para cargar temperamentos desde la API a la base de datos.
 const chargeTemperamentsToDB = async () => {
-	// Realizamos una solicitud HTTP para obtener los datos de temperamento desde la URL.
+	// Realizamos una solicitud para obtener los datos de temperamento desde la URL.
 	let dogsAPI = await axios.get(URL);
 
 	// Iteramos sobre los datos de la API.
@@ -14,7 +14,7 @@ const chargeTemperamentsToDB = async () => {
 			// Si el perro tiene temperamento, lo dividimos en temperamentos individuales.
 			const temps = dog.temperament.split(', ');
 
-			// Iteramos sobre los temperamentos y los almacenamos en la base de datos si no existen.
+			// Itera sobre los temperamentos y los almacena en la base de datos si no existen.
 			temps.forEach((temp) =>
 				Temperament.findOrCreate({
 					where: {

@@ -3,7 +3,7 @@ const { controllerDogs } = require('../controllers');
 const { validateDogCreationFields } = require('../utils/validations');
 const { Dog } = require('../db');
 
-// Controlador para obtener perros.
+// handler para obtener perros.
 const getDogs = async (req, res) => {
 	try {
 		// Obtiene el parámetro 'name' de la solicitud si está presente.
@@ -30,7 +30,7 @@ const getDogs = async (req, res) => {
 	}
 };
 
-// Controlador para obtener un perro por ID.
+// handler para obtener un perro por ID.
 const getDogsById = async (req, res) => {
 	try {
 		// Obtiene el parámetro 'id' de la solicitud.
@@ -51,23 +51,9 @@ const getDogsById = async (req, res) => {
 	}
 };
 
-const getDogsByName = async (req, res) => {
-	try {
-		const name = req.query.name; // Accede correctamente al parámetro de consulta 'name'.
 
-		if (name) {
-			const dog = await controllerDogs.getDogsByName(name);
-			if (!dog.length) return res.status(404).json('Dog not found');
-			return res.status(200).json(dog);
-		} else {
-			return res.status(400).json('missing name');
-		}
-	} catch (error) {
-		res.status(500).json({ error: error.message });
-	}
-};
 
-// Controlador para crear un nuevo perro.
+// handler para crear un nuevo perro.
 const postDog = async (req, res) => {
 	try {
 		// Obtiene los campos del cuerpo de la solicitud.
@@ -88,7 +74,7 @@ const postDog = async (req, res) => {
 		validateDogCreationFields(req.body);
 
 		try {
-			// Intenta crear un nuevo perro utilizando el controlador.
+			// Intenta crear un nuevo perro utilizando el handler.
 			let newDog = await controllerDogs.createDog(
 				name,
 				image,
@@ -108,7 +94,7 @@ const postDog = async (req, res) => {
 			if (error.message.startsWith('The')) {
 				res.status(400).json('Name already exists in the database'); // Responde con un error 400 (solicitud incorrecta) con un mensaje
 			} else {
-				throw error; // Relanzar cualquier otra excepción no esperada
+				throw error; // Relanza cualquier otro error no esperado
 			}
 		}
 	} catch (error) {
@@ -123,7 +109,6 @@ const deleteDog = async (req, res) => {
 	if (id.length < 30) res.json('ID must be a dog from the database');
 	try {
 		const dog = await Dog.findOne({ where: { id } });
-		// console.log(pokemon);
 		if (dog) {
 			await dog.destroy();
 			return res.json('Dog deleted').status(200);
@@ -135,24 +120,11 @@ const deleteDog = async (req, res) => {
 	}
 };
 
-// Controlador para obtener perros filtrados por temperamento.
-const getBreedsFilteredByTemp = async (req, res) => {
-	try {
-		// Obtenemos el parametro 'temperament' de la solicitud.
-		const { temperament } = req.query;
-		const dogs = await controllerDogs.breedsFilteredByTemp(temperament);
-		res.status(200).json(dogs);
-	} catch (error) {
-		// Manejo de errores: Si ocurre un error, responde con un error 500
-		res.status(500).json({ error: error.message });
-	}
-};
+
 
 module.exports = {
 	getDogs,
 	getDogsById,
-	getDogsByName,
 	postDog,
-	getBreedsFilteredByTemp,
 	deleteDog,
 };

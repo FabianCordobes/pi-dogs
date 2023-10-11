@@ -1,21 +1,25 @@
-import { useState, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import style from './Navbar.module.css';
-import SearchBar from '../SearchBar/SearchBar';
-import title from '/public/dog.png';
-import { useMedia } from 'react-use';
+import { useState, useEffect } from 'react'; // Importa useState y useEffect de React
+import { Link, NavLink } from 'react-router-dom'; // Importa Link y NavLink para la navegación
+import style from './Navbar.module.css'; // Importa el archivo CSS local
+import SearchBar from '../SearchBar/SearchBar'; // Importa el componente SearchBar
+import title from '/public/dog.png'; // Importa la imagen del título del sitio
 
 const Navbar = () => {
-	const [isNavVisible, setIsNavVisible] = useState(true); // Estado para controlar la visibilidad de la barra de navegación
+	// Estado para controlar la visibilidad de la barra de navegación
+	const [isNavVisible, setIsNavVisible] = useState(true);
+	// Almacena la posición de desplazamiento previa
 	const [prevScrollPos, setPrevScrollPos] = useState(0);
 
+	// Estado para controlar si el menú móvil está abierto o cerrado
 	const [isOpen, setIsOpen] = useState(false);
-	const isMobile = useMedia('(max-width: 768px)');
+	// Detecta si la pantalla es de tamaño móvil
 
 	useEffect(() => {
+		// Función para manejar el desplazamiento de la página
 		const handleScroll = () => {
 			const currentScrollPos = window.pageYOffset;
 
+			// Comprueba si se está desplazando hacia abajo o arriba
 			if (currentScrollPos > prevScrollPos) {
 				setIsNavVisible(false); // Oculta la barra al hacer scroll hacia abajo
 			} else {
@@ -32,6 +36,7 @@ const Navbar = () => {
 		};
 	}, [prevScrollPos]);
 
+	// Función para abrir o cerrar el menú móvil
 	const handleCloseMenu = () => {
 		setIsOpen(!isOpen);
 	};
@@ -48,66 +53,26 @@ const Navbar = () => {
 					/>
 				</Link>
 			</div>
-			{isMobile ? (
-				<>
-					<button
-						onClick={handleCloseMenu}
-						style={{ fontSize: '2rem', marginRight: '20px', borderRadius: '8px' }}>
-						{isOpen ? 'X' : '<'}
-					</button>
-					{isOpen && (
-						<div className={`${style.navMenu} ${isOpen ? style['menuOpen'] : ''}`}>
-							<SearchBar handleCloseMenu={handleCloseMenu} />
-							<div
-								style={{
-									display: 'flex',
-									flexDirection: 'column',
-									justifyContent: 'space-around',
-								}}>
-								<div className={style.linkContainer}>
-									<NavLink
-										to={'/home'}
-										activeClassName={style.activeLink}
-										onClick={handleCloseMenu}>
-										Home
-									</NavLink>
-								</div>
 
-								<div className={style.linkContainer}>
-									<NavLink
-										to={'/create'}
-										activeClassName={style.activeLink}
-										onClick={handleCloseMenu}>
-										Create Dog
-									</NavLink>
-								</div>
-							</div>
-						</div>
-					)}
-				</>
-			) : (
-				<>
-					<div className={style.linkContainer}>
-						<NavLink
-							to="/home"
-							activeClassName={style.activeLink}>
-							Home
-						</NavLink>
-					</div>
-
-					<SearchBar />
-
-					<div className={style.linkContainer}>
-						<NavLink
-							to="/create"
-							activeClassName={style.activeLink}>
-							Create Dog
-						</NavLink>
-					</div>
-				</>
-			)}
+			<>
+				<div className={style.linkContainer}>
+					<NavLink
+						to="/home"
+						activeClassName={style.activeLink}>
+						Home
+					</NavLink>
+				</div>
+				<SearchBar />
+				<div className={style.linkContainer}>
+					<NavLink
+						to="/create"
+						activeClassName={style.activeLink}>
+						Create Dog
+					</NavLink>
+				</div>
+			</>
 		</nav>
 	);
 };
 
-export default Navbar;
+export default Navbar; // Exporta el componente Navbar

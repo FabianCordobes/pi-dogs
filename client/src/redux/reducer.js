@@ -4,173 +4,157 @@ import {
 	GET_DOG_DETAILS,
 	GET_DOG_BY_NAME,
 	CLEAR_DOG_DETAILS,
-	CREATE_DOG,
 	DELETE_DOG,
-	RESET_PAGE,
 	FILTER_BY_ORIGIN,
 	FILTER_BY_TEMP,
 	SORT_BY,
 	RESET_FILTERS,
-} from './actionType';
+} from './actionType'; // Importa los tipos de acciones desde el archivo 'actionType'
 
-// Estado inicial
+// Estado inicial de la aplicación
 const initialState = {
-	dogs: [],
-	auxDogs: [],
-	temperaments: [],
-	detailDog: {},
-	msg: '',
+	dogs: [], // Almacena la lista de razas de perros
+	auxDogs: [], // Almacena una copia auxiliar de la lista de razas de perros
+	temperaments: [], // Almacena la lista de temperamentos
+	detailDog: {}, // Almacena los detalles de un perro
+	msg: '', // Almacena mensajes de estado
 };
 
-// Define un estado inicial para los filtros
-
+// Reducer que maneja el estado de la aplicación
 export default function reducer(state = initialState, action) {
-	const { payload, type } = action; // Desestructurar la acción
+	const { payload, type } = action; // Desestructura el tipo y los datos de la acción
 
-	// Switch para manejar diferentes acciones
 	switch (type) {
 		case RESET_FILTERS:
+			// Acción para restablecer los filtros
 			return {
 				...state,
-				dogs: state.auxDogs, // Restablecer la lista de perros a su estado original
+				dogs: state.auxDogs, // Restablece la lista de razas de perros a su estado auxiliar original
 			};
 
-		// Reiniciar el número de página
-		case RESET_PAGE:
-			return {
-				...state,
-				numPage: 1, // Establecer el número de página en 1
-			};
-
-		// Actualizar la lista de pokemones y la lista auxiliar
 		case GET_DOGS:
+			// Acción para obtener la lista de razas de perros
 			return {
 				...state,
-				dogs: payload, // Actualizar la lista de pokemones con los datos recibidos en payload
-				auxDogs: payload, // Actualizar la lista auxiliar de pokemones con los mismos datos
+				dogs: payload, // Actualiza la lista de razas de perros con los datos recibidos
+				auxDogs: payload, // Actualiza la lista auxiliar de razas de perros con los mismos datos
 			};
 
-		// Actualizar la lista de tipos
 		case GET_TEMPERAMENTS:
+			// Acción para obtener la lista de temperamentos
 			return {
 				...state,
-				temperaments: payload, // Actualizar la lista de tipos con los datos recibidos en payload
+				temperaments: payload, // Actualiza la lista de temperamentos
 			};
 
-		// Filtrar por origen
 		case FILTER_BY_ORIGIN:
-			// Obtener la lista completa de pokemones
-			const allDogsByOrigin = state.auxDogs;
+			// Acción para filtrar razas de perros por origen
+			const allDogsByOrigin = state.auxDogs; // Obtiene todas las razas desde la lista auxiliar
 			let originFiltered;
 
-			// Verificar el valor del filtro recibido en 'payload'
-			if (payload === 'All') originFiltered = allDogsByOrigin; // Si es 'All', mostrar todos los pokemones
+			if (payload === 'All') originFiltered = allDogsByOrigin; // Si el filtro es "All," muestra todas las razas
 			if (payload === 'API')
-				originFiltered = allDogsByOrigin.filter((dog) => typeof dog.id === 'number'); // Si es 'PokeAPI', filtrar por aquellos con ID numérico
+				originFiltered = allDogsByOrigin.filter((dog) => typeof dog.id === 'number'); // Filtra las razas de la API
 			if (payload === 'Created')
-				originFiltered = allDogsByOrigin.filter((dog) => dog.id.toString().length > 30); // Si es 'Created', filtrar por aquellos con IDs como cadenas largas
+				originFiltered = allDogsByOrigin.filter((dog) => dog.id.toString().length > 30); // Filtra las razas creadas localmente
 
-			// Comprobar si se encontraron pokemones después del filtro
 			if (originFiltered.length) {
+				// Si hay razas después de aplicar el filtro
 				return {
 					...state,
-					dogs: originFiltered, // Actualizar la lista de pokemones con los filtrados
-					msg: '',
+					dogs: originFiltered, // Actualiza la lista de razas de perros
+					msg: '', // Restablece el mensaje de estado
 				};
 			} else {
+				// Si no hay razas después del filtro
 				return {
 					...state,
-					msg: 'There are no created dog yet', // Mensaje si no se encontraron pokemones después del filtro
+					msg: 'There are no created dog yet', // Muestra un mensaje de estado
 				};
 			}
 
-		// Filtrar por temperamento
 		case FILTER_BY_TEMP:
-			const allDogsByTemp = state.auxDogs;
+			// Acción para filtrar razas de perros por temperamento
+			const allDogsByTemp = state.auxDogs; // Obtiene todas las razas desde la lista auxiliar
 			let tempFiltered;
 
-			// Verificar el valor del filtro recibido en 'payload'
-			if (payload === 'All') tempFiltered = allDogsByTemp;
+			if (payload === 'All') tempFiltered = allDogsByTemp; // Si el filtro es "All," muestra todas las razas
 			if (payload !== 'All')
-				tempFiltered = allDogsByTemp.filter((dog) => dog.Temperaments?.includes(payload));
+				tempFiltered = allDogsByTemp.filter((dog) => dog.Temperaments?.includes(payload)); // Filtra las razas por temperamento
 
 			if (tempFiltered.length) {
+				// Si hay razas después de aplicar el filtro
 				return {
 					...state,
-					dogs: tempFiltered,
-					msg: '',
+					dogs: tempFiltered, // Actualiza la lista de razas de perros
+					msg: '', // Restablece el mensaje de estado
 				};
 			} else {
+				// Si no hay razas después del filtro
 				return {
 					...state,
-					msg: 'There are no loaded dog of the selected temp',
+					msg: 'There are no loaded dog of the selected temp', // Muestra un mensaje de estado
 				};
 			}
 
 		case SORT_BY:
-			const dogSorted = state.dogs.slice();
+			// Acción para ordenar la lista de razas de perros
+			const dogSorted = state.dogs.slice(); // Crea una copia de la lista de razas para ordenar
 			let orderBy;
 
-			// Verificar el criterio de ordenamiento especificado en 'payload'
+			// Aplica diferentes métodos de ordenamiento según el filtro recibido
 			if (payload === 'A-Z') {
-				orderBy = dogSorted.sort((a, b) => (a.name > b.name ? 1 : -1)); // Ordenar alfabéticamente de A a Z por nombre
+				orderBy = dogSorted.sort((a, b) => (a.name > b.name ? 1 : -1)); // Ordena alfabéticamente de A a Z
 			} else if (payload === 'Z-A') {
-				orderBy = dogSorted.sort((a, b) => (a.name < b.name ? 1 : -1)); // Ordenar alfabéticamente de Z a A por nombre
+				orderBy = dogSorted.sort((a, b) => (a.name < b.name ? 1 : -1)); // Ordena alfabéticamente de Z a A
 			} else if (payload === 'weight-asc') {
-				orderBy = dogSorted.sort((a, b) => a.minWeight - b.minWeight); // Ordenar por peso ascendente
+				orderBy = dogSorted.sort((a, b) => a.minWeight - b.minWeight); // Ordena por peso ascendente
 			} else if (payload === 'weight-desc') {
-				orderBy = dogSorted.sort((a, b) => b.maxWeight - a.maxWeight); // Ordenar por peso descendente
+				orderBy = dogSorted.sort((a, b) => b.maxWeight - a.maxWeight); // Ordena por peso descendente
 			} else if (payload === 'height-asc') {
-				orderBy = dogSorted.sort((a, b) => a.minHeight - b.minHeight); // Ordenar por altura ascendente
+				orderBy = dogSorted.sort((a, b) => a.minHeight - b.minHeight); // Ordena por altura ascendente
 			} else if (payload === 'height-desc') {
-				orderBy = dogSorted.sort((a, b) => b.maxHeight - a.maxHeight); // Ordenar por altura descendente
+				orderBy = dogSorted.sort((a, b) => b.maxHeight - a.maxHeight); // Ordena por altura descendente
 			} else if (payload === 'lifeSpan-asc') {
-				orderBy = dogSorted.sort((a, b) => a.minLifeSpan - b.minLifeSpan); // Ordenar por vida útil ascendente
+				orderBy = dogSorted.sort((a, b) => a.minLifeSpan - b.minLifeSpan); // Ordena por vida útil ascendente
 			} else if (payload === 'lifeSpan-desc') {
-				orderBy = dogSorted.sort((a, b) => b.maxLifeSpan - a.maxLifeSpan); // Ordenar por vida útil descendente
+				orderBy = dogSorted.sort((a, b) => b.maxLifeSpan - a.maxLifeSpan); // Ordena por vida útil descendente
 			}
 
 			return {
 				...state,
-				dogs: orderBy,
+				dogs: orderBy, // Actualiza la lista de razas de perros ordenada
 			};
 
-		// Agregar un nuevo pokemon a la lista
-		case CREATE_DOG:
-			return {
-				...state,
-				dogs: [...state.dogs, payload], // Agregar el nuevo pokemon a la lista existente
-			};
-
-		// Actualizar los detalles del pokemon
 		case GET_DOG_DETAILS:
+			// Acción para obtener los detalles de un perro
 			return {
 				...state,
-				detailDog: payload, // Actualizar los detalles del pokemon con los datos recibidos en payload
+				detailDog: payload, // Actualiza los detalles del perro con los datos recibidos
 			};
 
-		// Borrar los detalles del pokemon
 		case CLEAR_DOG_DETAILS:
+			// Acción para borrar los detalles de un perro
 			return {
 				...state,
-				detailDog: {}, // Limpiar los detalles del pokemon (dejarlo vacío)
+				detailDog: {}, // Restablece los detalles del perro a un objeto vacío
 			};
 
-		// Obtener un pokemon por nombre
 		case GET_DOG_BY_NAME:
+			// Acción para buscar un perro por nombre
 			return {
 				...state,
-				detailDog: payload, // Actualizar los detalles del pokemon con los datos recibidos en payload
+				detailDog: payload, // Actualiza los detalles del perro con los datos del perro encontrado
 			};
 
-		// Eliminar un pokemon de la lista
 		case DELETE_DOG:
+			// Acción para eliminar un perro
 			return {
 				...state,
-				dogs: state.dogs.filter((dog) => dog.id !== payload), // Filtrar la lista de pokemones para eliminar el pokemon con el ID especificado
+				dogs: state.dogs.filter((dog) => dog.id !== payload), // Filtra la lista de perros, excluyendo el perro eliminado
 			};
 
 		default:
-			return state; // Devolver el estado sin cambios si la acción no coincide
+			return state; // Devuelve el estado sin cambios si la acción no coincide con ningún caso
 	}
 }

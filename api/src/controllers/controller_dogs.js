@@ -1,19 +1,18 @@
-// Importamos los modelos Dog y Temperament desde '../models'.
+// Importamos los modelos Dog y Temperament .
 const { Dog, Temperament } = require('../db');
 
 // Importamos las variables de configuración URL y API_KEY desde '../utils/config'.
 const { URL, API_KEY } = require('../utils/config');
 
-// Importamos la librería axios para hacer solicitudes HTTP.
 const axios = require('axios');
 
 // Función para obtener todos los perros desde la API y la base de datos.
 const getAllDogs = async () => {
 	// Hacemos una solicitud HTTP a la API de perros.
-	let apiData = await axios.get(URL + '?api_key=' + API_KEY);
+	let apiData = await axios.get(`${URL}?api_key=${API_KEY}`);
 
 	// Mapeamos los datos de la API a un formato más manejable.
-	const dogsAPI = apiData.data.map((dog) => ({
+	const dogsAPI = apiData?.data?.map((dog) => ({
 		id: dog.id,
 		name: dog.name,
 		image: dog.image.url,
@@ -128,21 +127,10 @@ const createDog = async (
 	return { ...dog.toJSON(), temperaments: temperamentsNames };
 };
 
-// Función para filtrar perros por temperamento.
-const breedsFilteredByTemp = async (temperament) => {
-	let dogs = await getAllDogs();
-	console.log(temperament);
-	console.log(dogs);
-	return dogs.filter((dog) => dog.temperament.some((temp) => temperament.includes(temp)));
-};
-
-const deleteDog = async (id) => {};
-
 // Exportamos todas las funciones para que estén disponibles en otros módulos.
 module.exports = {
 	getAllDogs,
 	getDogsByName,
 	getDogsByID,
 	createDog,
-	breedsFilteredByTemp,
 };

@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
         unique: true,
         allowNull: false,
       },
-    }, //no hace falta poner el id, sequelize lo hace automático
+    }, 
     { timestamps: false }
   );
 };

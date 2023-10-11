@@ -7,7 +7,6 @@ router.get("/", handlersDogs.getDogs);
 
 router.get("/:id", handlersDogs.getDogsById);
 
-// router.get("/search", handlersDogs.getDogsByName); // Ruta para buscar perros por nombre
 
 router.post("/", handlersDogs.postDog);
 

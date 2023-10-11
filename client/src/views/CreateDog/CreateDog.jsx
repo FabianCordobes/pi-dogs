@@ -1,25 +1,27 @@
-import style from './CreateDog.module.css';
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getTemperaments } from '../../redux/actions';
-import validate from '../../validators/validators';
-import axios from 'axios';
-import formImage from '../../assets/formImage.png';
-import formImgCheck from '../../assets/check.png';
+// Importación de módulos y recursos
+import style from './CreateDog.module.css'; // Importa el archivo CSS local
+import { useState, useEffect } from 'react'; // Importa useState y useEffect de React
+import { useDispatch, useSelector } from 'react-redux'; // Importa useDispatch y useSelector de React Redux
+import { getTemperaments } from '../../redux/actions'; // Importa una acción de Redux
+import validate from '../../validators/validators'; // Importa una función de validación
+import axios from 'axios'; // Importa la librería Axios para realizar solicitudes HTTP
+import formImgCheck from '../../assets/check.png'; // Importa una imagen
 
+// Componente CreateDog
 const CreateDog = () => {
-	const dispatch = useDispatch();
+	const dispatch = useDispatch(); // Obtiene la función dispatch de Redux
 
-	//ESTADOS GLOBALES
-	const allTemperaments = useSelector((state) => state.temperaments);
+	// ESTADOS GLOBALES
+	const allTemperaments = useSelector((state) => state.temperaments); // Obtiene datos del estado global usando useSelector
 
 	useEffect(() => {
-		dispatch(getTemperaments());
+		dispatch(getTemperaments()); // Ejecuta una acción para obtener datos de temperamentos cuando el componente se monta
 	}, [dispatch]);
 
 	// ESTADOS LOCALES
 	const [form, setForm] = useState({
-		name: '',
+		// Define el estado local 'form' con un objeto inicial vacío y la función 'setForm' para actualizarlo
+		name: '', // Propiedades iniciales del objeto 'form'
 		image: '',
 		minHeight: '',
 		maxHeight: '',
@@ -27,39 +29,41 @@ const CreateDog = () => {
 		maxWeight: '',
 		minLifeSpan: '',
 		maxLifeSpan: '',
-		temperaments: [],
+		temperaments: [], // Inicialmente una matriz vacía para los temperamentos seleccionados
 		breed_group: '',
 	});
 
-	const [errors, setErrors] = useState({});
+	const [errors, setErrors] = useState({}); // Define el estado local 'errors' y la función 'setErrors' para gestionar errores de validación
 
-	const [showAlert, setShowAlert] = useState(false); // Estado para mostrar u ocultar la alerta
+	const [showAlert, setShowAlert] = useState(false); // Estado para mostrar una alerta
 
-	const [alertTimeout, setAlertTimeout] = useState(null); // Estado para ocultar la alerta
+	const [alertTimeout, setAlertTimeout] = useState(null); // Estado para el tiempo de espera de la alerta
 
-	const [windowWidth, setWindowWidth] = useState(window.innerWidth); //Estado para ocultar la Imagen segun el ancho de la pantalla
-
-	//HANDLERS
+	// HANDLERS
 	const changeHandler = (event) => {
-		//El mismo estado que estoy por setear se lo doy a Validate tambien, ya que la validacion se realiza mas rapido que el cambio de estado, de esta forma le llega lo mismo a los dos
-		const newState = { ...form };
-		setErrors(validate({ ...newState, [event.target.name]: event.target.value }));
-		setForm({ ...newState, [event.target.name]: event.target.value });
+		// Manejador para los cambios en los campos de entrada
+		const newState = { ...form }; // Crea una copia del objeto 'form'
+		setErrors(validate({ ...newState, [event.target.name]: event.target.value })); // Valida los campos actualizados
+		setForm({ ...newState, [event.target.name]: event.target.value }); // Actualiza el objeto 'form'
 	};
 
 	const submitHandler = (event) => {
-		const endpoint = 'http://localhost:3001/dogs';
+		// Manejador para enviar el formulario
+		const endpoint = 'http://localHost:3001/dogs'; // URL del servidor donde se enviará el formulario
 
-		event.preventDefault();
+		event.preventDefault(); // Previene la recarga de la página al enviar el formulario
 
+		// Realiza una solicitud POST al servidor con los datos del formulario
 		const response = axios
 			.post(endpoint, {
 				...form,
 				temperaments: form.temperaments.map((temp) => temp.id),
 			})
 			.then((res) => {
-				setShowAlert(true); // Mostrar la alerta si la respuesta es exitosa
+				// Maneja la respuesta exitosa
+				setShowAlert(true); // Muestra una alerta
 				setForm({
+					// Restablece los campos del formulario
 					name: '',
 					image: '',
 					minHeight: '',
@@ -70,11 +74,12 @@ const CreateDog = () => {
 					maxLifeSpan: '',
 					temperaments: [],
 					breed_group: '',
-				}); // Limpiar el formulario después de enviarlo
+				});
 			})
 			.catch((error) => {
+				// Maneja errores en la solicitud
 				if (error.response && error.response.status === 400) {
-					alert('Error: ' + error.response.data.error); // Mostrar un mensaje de alerta si el error es un error 400
+					alert('Error: ' + error.response.data.error);
 				} else {
 					console.log(error);
 				}
@@ -82,8 +87,7 @@ const CreateDog = () => {
 	};
 
 	const selectHandler = (event) => {
-		console.log(event.target.value);
-
+		// Manejador para la selección de temperamentos
 		if (
 			event.target.value &&
 			!form.temperaments.some((temp) => temp.name === event.target.value)
@@ -102,6 +106,7 @@ const CreateDog = () => {
 	};
 
 	const deleteTemperament = (temperament) => {
+		// Manejador para eliminar un temperamento seleccionado
 		let newTemps = form.temperaments.filter((temp) => temp !== temperament);
 		setForm({
 			...form,
@@ -115,14 +120,10 @@ const CreateDog = () => {
 		);
 	};
 
-	const updateWindowWidth = () => {
-		setWindowWidth(window.innerWidth);
-	};
-
-	//USE-EFFECT
+	// USE-EFFECT
 
 	useEffect(() => {
-		// Ocultar el alerta después de 3 segundos
+		// Efecto para mostrar una alerta
 		if (showAlert) {
 			setAlertTimeout(
 				setTimeout(() => {
@@ -130,21 +131,10 @@ const CreateDog = () => {
 				}, 3000)
 			);
 		}
-		// Limpiar el tiempo de espera del alerta cuando se desmonta el componente
 		return () => {
 			clearTimeout(alertTimeout);
 		};
 	}, [showAlert]);
-
-	useEffect(() => {
-		// Agregar un listener para actualizar el estado cuando cambie el ancho de la ventana
-		window.addEventListener('resize', updateWindowWidth);
-
-		// Limpieza del listener cuando el componente se desmonte
-		return () => {
-			window.removeEventListener('resize', updateWindowWidth);
-		};
-	}, []);
 
 	return (
 		<div className={style.container}>
