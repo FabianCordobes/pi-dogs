@@ -23,7 +23,7 @@ function validateDogCreationFields({
    ) {
      throw new Error("You must fill in all the required information");
    } else if (
-     // Comprueba si alguno de los valores de altura, peso o vida es negtivo
+     // Comprueba si alguno de los valores de altura, peso o vida es negativo
      minHeight <= 0 ||
      maxHeight <= 0 ||
      minWeight <= 0 ||

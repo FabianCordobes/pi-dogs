@@ -35,7 +35,6 @@ const getDogsById = async (req, res) => {
 	try {
 		// Obtiene el parámetro 'id' de la solicitud.
 		const id = req.params.id;
-		// console.log(id);
 		if (id) {
 			// Si se proporciona el id, obtenemos el perro por su ID..
 			const dog = await controllerDogs.getDogsByID(id);
@@ -56,7 +55,7 @@ const getDogsById = async (req, res) => {
 // handler para crear un nuevo perro.
 const postDog = async (req, res) => {
 	try {
-		// Obtiene los campos del cuerpo de la solicitud.
+		// Obtiene los campos del body.
 		const {
 			name,
 			image,
@@ -90,7 +89,7 @@ const postDog = async (req, res) => {
 
 			res.status(201).json(newDog); // Responde con un codigo 201 (creado) y el nuevo perro creado
 		} catch (error) {
-			// Capturar el error cuando el perro ya existe
+			//  error cuando el perro ya existe
 			if (error.message.startsWith('The')) {
 				res.status(400).json('Name already exists in the database'); // Responde con un error 400 (solicitud incorrecta) con un mensaje
 			} else {
@@ -105,7 +104,7 @@ const postDog = async (req, res) => {
 
 const deleteDog = async (req, res) => {
 	const { id } = req.params;
-	// console.log(id);
+	
 	if (id.length < 30) res.json('ID must be a dog from the database');
 	try {
 		const dog = await Dog.findOne({ where: { id } });
